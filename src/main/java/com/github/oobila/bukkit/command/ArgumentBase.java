@@ -6,7 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 
 @Getter
-public class Argument<T> {
+@SuppressWarnings("unchecked")
+public class ArgumentBase<T, S extends ArgumentBase<T,?>> {
 
     private final String name;
     private final Class<T> type;
@@ -15,11 +16,12 @@ public class Argument<T> {
     private SuggestionCallable<T> suggestionCallable;
     private T min;
     private T max;
+    private T defaultValue;
     private final ArgumentDeserializer<T> deserializer;
     int position;
 
     @SuppressWarnings("unchecked")
-    public Argument(String name, Class<T> type, ArgumentDeserializer<T> deserializer) {
+    public ArgumentBase(String name, Class<T> type, ArgumentDeserializer<T> deserializer) {
         this.name = name;
         this.type = type;
         this.deserializer = deserializer;
@@ -30,34 +32,35 @@ public class Argument<T> {
         }
     }
 
-    public static <T> Argument<T> arg(String name, Class<T> type, ArgumentDeserializer<T> deserializer) {
-        return new Argument<>(name, type, deserializer);
-    }
-
-    public Argument<T> mandatory(boolean mandatory) {
+    public S mandatory(boolean mandatory) {
         this.mandatory = mandatory;
-        return this;
+        return (S) this;
     }
 
-    public Argument<T> fixedSuggestions(List<T> fixedSuggestions) {
+    public S defaultValue(T defaultValue) {
+        this.defaultValue = defaultValue;
+        return (S) this;
+    }
+
+    public S fixedSuggestions(List<T> fixedSuggestions) {
         this.suggestionCallable = null;
         this.fixedSuggestions = fixedSuggestions;
-        return this;
+        return (S) this;
     }
 
-    public Argument<T> suggestionCallable(SuggestionCallable<T> suggestionCallable) {
+    public S suggestionCallable(SuggestionCallable<T> suggestionCallable) {
         this.fixedSuggestions = null;
         this.suggestionCallable = suggestionCallable;
-        return this;
+        return (S) this;
     }
 
-    public Argument<T> range(T min, T max) {
+    public S range(T min, T max) {
         this.min = min;
         this.max = max;
-        return this;
+        return (S) this;
     }
 
-    public void validate(List<Argument<?>> arguments) {
+    public void validate(List<ArgumentBase<?,?>> arguments) {
         if (!arguments.isEmpty() && !arguments.get(arguments.size() - 1).isMandatory() && mandatory) {
             throw new RuntimeException("Mandatory arguments must exist at the end of the command");
         }

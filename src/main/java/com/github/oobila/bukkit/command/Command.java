@@ -36,7 +36,7 @@ public class Command implements CommandExecutor, TabCompleter {
 
     private final String name;
     private final String description;
-    private final List<Argument<?>> arguments = new ArrayList<>();
+    private final List<ArgumentBase<?,?>> arguments = new ArrayList<>();
     private Command parent = null;
     private List<String> aliases;
     private String permission;
@@ -70,7 +70,7 @@ public class Command implements CommandExecutor, TabCompleter {
         return this;
     }
 
-    public <T> Command arg(Argument<T> argument) {
+    public <T> Command arg(ArgumentBase<T,?> argument) {
         argument.validate(arguments);
         argument.position = arguments.size();
         arguments.add(argument);
@@ -141,7 +141,7 @@ public class Command implements CommandExecutor, TabCompleter {
                 return Collections.emptyList();
             }
             if (!arguments.isEmpty() && arguments.size() >= args.length) {
-                Argument<?> argument = arguments.get(args.length - 1);
+                ArgumentBase<?,?> argument = arguments.get(args.length - 1);
                 if (argument.getFixedSuggestions() != null && !argument.getFixedSuggestions().isEmpty()) {
                     return argument.getFixedSuggestions().stream()
                             .map(Object::toString)
@@ -207,7 +207,7 @@ public class Command implements CommandExecutor, TabCompleter {
             //send help command
             return false;
         }
-        Argument<?> argument = arguments.get(i);
+        ArgumentBase<?,?> argument = arguments.get(i);
         if (!argument.isMandatory() && args.length <= i) {
             //reached non-mandatory arguments
             return true;
@@ -233,7 +233,7 @@ public class Command implements CommandExecutor, TabCompleter {
                 (args[0].equalsIgnoreCase("help") || args[0].equals("?"));
     }
 
-    private <T> ValidationResponse handleValidation(Argument<T> argument, String input) {
+    private <T> ValidationResponse handleValidation(ArgumentBase<T,?> argument, String input) {
         ValidationResponse response = null;
         if (argument.getType().equals(String.class)) {
             return null;
@@ -304,7 +304,7 @@ public class Command implements CommandExecutor, TabCompleter {
                 );
     }
 
-    private static Message getHelpMessageSegment(List<Argument<?>> arguments, String parentPath, String description) {
+    private static Message getHelpMessageSegment(List<ArgumentBase<?,?>> arguments, String parentPath, String description) {
         return Message.builder("{0} {1} - {2}")
                 .arg(ChatColor.WHITE, "/" + parentPath)
                 .arg(ChatColor.GRAY, arguments.stream().map(argument -> "[" + argument.getName() + "]")
