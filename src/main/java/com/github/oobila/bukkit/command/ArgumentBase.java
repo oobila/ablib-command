@@ -67,7 +67,10 @@ public class ArgumentBase<T, S extends ArgumentBase<T,?>> {
     }
 
     public T get(String[] args) {
-        return deserializer.deserialize(args[position]);
+        if (args.length > position) {
+            return deserializer.deserialize(args[position]);
+        }
+        return defaultValue;
     }
 
     public interface ArgumentDeserializer<T> {
