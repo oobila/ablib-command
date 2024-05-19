@@ -2,6 +2,8 @@ package com.github.oobila.bukkit.command;
 
 import com.github.oobila.bukkit.chat.Message;
 import com.github.oobila.bukkit.command.arguments.Argument;
+import com.github.oobila.bukkit.command.arguments.EnumArg;
+import com.github.oobila.bukkit.command.arguments.StringArg;
 import com.github.oobila.bukkit.command.validators.ValidationResponse;
 import com.github.oobila.bukkit.command.validators.Validator;
 import lombok.Getter;
@@ -71,11 +73,22 @@ public class Command implements CommandExecutor, TabCompleter {
         return this;
     }
 
-    public <T> Command arg(ArgumentBase<T,?> argument) {
+    public <T, S extends ArgumentBase<T, ?>> ArgumentBase<T, S> arg(ArgumentBase<T, S> argument) {
         argument.validate(arguments);
         argument.position = arguments.size();
         arguments.add(argument);
-        return this;
+        return argument;
+    }
+
+    public StringArg arg(String name) {
+        return new StringArg(name);
+    }
+
+    public <T extends Enum<T>> EnumArg<T> arg(
+            String name,
+            Class<T> type
+    ) {
+        return new EnumArg<>(name, type);
     }
 
     public <T> Argument<T> arg(
