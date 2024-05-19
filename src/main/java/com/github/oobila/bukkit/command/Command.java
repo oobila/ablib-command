@@ -1,6 +1,7 @@
 package com.github.oobila.bukkit.command;
 
 import com.github.oobila.bukkit.chat.Message;
+import com.github.oobila.bukkit.command.arguments.Argument;
 import com.github.oobila.bukkit.command.validators.ValidationResponse;
 import com.github.oobila.bukkit.command.validators.Validator;
 import lombok.Getter;
@@ -75,6 +76,28 @@ public class Command implements CommandExecutor, TabCompleter {
         argument.position = arguments.size();
         arguments.add(argument);
         return this;
+    }
+
+    public <T> Argument<T> arg(
+            String name,
+            Class<T> type,
+            ArgumentBase.ArgumentDeserializer<T> deserializer
+    ) {
+        return arg(name, type, deserializer, null, true);
+    }
+
+    public <T> Argument<T> arg(
+            String name,
+            Class<T> type,
+            ArgumentBase.ArgumentDeserializer<T> deserializer,
+            T defaultValue,
+            boolean mandatory
+    ) {
+        Argument<T> argument = new Argument<>(name, type, deserializer)
+                .defaultValue(defaultValue)
+                .mandatory(mandatory);
+        arg(argument);
+        return argument;
     }
 
     public Command subCommand(Command subCommand) {
