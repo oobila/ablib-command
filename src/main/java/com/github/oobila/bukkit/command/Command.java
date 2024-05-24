@@ -81,14 +81,14 @@ public class Command implements CommandExecutor, TabCompleter {
     }
 
     public StringArg arg(String name) {
-        return new StringArg(name);
+        return (StringArg) arg(new StringArg(name));
     }
 
     public <T extends Enum<T>> EnumArg<T> arg(
             String name,
             Class<T> type
     ) {
-        return new EnumArg<>(name, type);
+        return (EnumArg<T>) arg(new EnumArg<>(name, type));
     }
 
     public <T> Argument<T> arg(
@@ -109,8 +109,7 @@ public class Command implements CommandExecutor, TabCompleter {
         Argument<T> argument = new Argument<>(name, type, deserializer)
                 .defaultValue(defaultValue)
                 .mandatory(mandatory);
-        arg(argument);
-        return argument;
+        return (Argument<T>) arg(argument);
     }
 
     public Command subCommand(Command subCommand) {
@@ -224,7 +223,11 @@ public class Command implements CommandExecutor, TabCompleter {
             //no arguments required
             return true;
         } else if (args.length > arguments.size()) {
-            TOO_MANY_ARGS.send(player);
+            if (isHelpMessage(0, args)) {
+                sendHelpMessage(player);
+            } else {
+                TOO_MANY_ARGS.send(player);
+            }
             return false;
         } else if (arguments.isEmpty()) {
             sendHelpMessage(player);
