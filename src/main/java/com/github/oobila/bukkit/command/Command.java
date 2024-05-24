@@ -180,7 +180,6 @@ public class Command implements CommandExecutor, TabCompleter {
                 ArgumentBase<?,?> argument = arguments.get(args.length - 1);
                 if (argument.getFixedSuggestions() != null && !argument.getFixedSuggestions().isEmpty()) {
                     return argument.getFixedSuggestions().stream()
-                            .map(Object::toString)
                             .filter(s ->
                                     args[args.length - 1].length() > 0 ?
                                             StringUtils.containsIgnoreCase(s, args[args.length - 1]) :
@@ -189,7 +188,7 @@ public class Command implements CommandExecutor, TabCompleter {
                 } else if (argument.getSuggestionCallable() != null) {
                     return argument.getSuggestionCallable()
                             .getSuggestions(player, args[args.length - 1]).stream()
-                            .map(Object::toString).toList();
+                            .toList();
                 }
             }
             if (args.length == 1 && !subCommands.isEmpty()) {

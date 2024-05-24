@@ -13,11 +13,12 @@ public class OfflinePlayerArg extends ArgumentBase<OfflinePlayer, OfflinePlayerA
         super(name, OfflinePlayer.class, Bukkit::getOfflinePlayer);
         suggestionCallable((player, arg) -> {
             if (arg == null || arg.isEmpty()) {
-                return List.of(player);
+                return List.of(player.getName());
             } else {
                 return Arrays.stream(Bukkit.getOfflinePlayers())
                         .filter(offlinePlayer -> offlinePlayer.getName().toLowerCase().contains(arg.toLowerCase()))
                         .limit(20)
+                        .map(OfflinePlayer::getName)
                         .toList();
             }
         });

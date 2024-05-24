@@ -4,8 +4,8 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public interface SuggestionCallable<T> {
+public interface SuggestionCallable {
 
-    List<T> getSuggestions(Player player, String arg);
+    List<String> getSuggestions(Player player, String arg);
 
 }

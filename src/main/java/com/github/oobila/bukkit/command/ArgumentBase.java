@@ -12,23 +12,22 @@ public class ArgumentBase<T, S extends ArgumentBase<T,?>> {
     private final String name;
     private final Class<T> type;
     private boolean mandatory = true;
-    private List<T> fixedSuggestions;
-    private SuggestionCallable<T> suggestionCallable;
+    private List<String> fixedSuggestions;
+    private SuggestionCallable suggestionCallable;
     private T min;
     private T max;
     private T defaultValue;
     private final ArgumentDeserializer<T> deserializer;
     int position;
 
-    @SuppressWarnings("unchecked")
     public ArgumentBase(String name, Class<T> type, ArgumentDeserializer<T> deserializer) {
         this.name = name;
         this.type = type;
         this.deserializer = deserializer;
         if (type.isEnum()) {
-            this.fixedSuggestions = Arrays.stream(type.getEnumConstants()).toList();
+            this.fixedSuggestions = Arrays.stream(type.getEnumConstants()).map(T::toString).toList();
         } else if (type.equals(boolean.class) || type.equals(Boolean.class)) {
-            this.fixedSuggestions = (List<T>) List.of(true, false);
+            this.fixedSuggestions = List.of("true", "false");
         }
     }
 
@@ -42,13 +41,13 @@ public class ArgumentBase<T, S extends ArgumentBase<T,?>> {
         return (S) this;
     }
 
-    public S fixedSuggestions(List<T> fixedSuggestions) {
+    public S fixedSuggestions(List<String> fixedSuggestions) {
         this.suggestionCallable = null;
         this.fixedSuggestions = fixedSuggestions;
         return (S) this;
     }
 
-    public S suggestionCallable(SuggestionCallable<T> suggestionCallable) {
+    public S suggestionCallable(SuggestionCallable suggestionCallable) {
         this.fixedSuggestions = null;
         this.suggestionCallable = suggestionCallable;
         return (S) this;
