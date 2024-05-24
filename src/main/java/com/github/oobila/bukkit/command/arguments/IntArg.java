@@ -8,5 +8,6 @@ public class IntArg extends ArgumentBase<Integer, IntArg> {
     public IntArg(String name) {
         super(name, int.class, Integer::parseInt);
         fixedSuggestions(List.of(1));
+        defaultValue(0);
     }
 }

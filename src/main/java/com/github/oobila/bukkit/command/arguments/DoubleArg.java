@@ -8,5 +8,6 @@ public class DoubleArg extends ArgumentBase<Double, DoubleArg> {
     public DoubleArg(String name) {
         super(name, double.class, Double::parseDouble);
         fixedSuggestions(List.of(1.0d));
+        defaultValue(0d);
     }
 }

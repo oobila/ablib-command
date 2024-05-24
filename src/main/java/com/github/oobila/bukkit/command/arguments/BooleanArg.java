@@ -8,5 +8,6 @@ public class BooleanArg extends ArgumentBase<Boolean, BooleanArg> {
     public BooleanArg(String name) {
         super(name, boolean.class, Boolean::parseBoolean);
         fixedSuggestions(List.of(true, false));
+        defaultValue(false);
     }
 }
