@@ -200,8 +200,8 @@ public class Command implements CommandExecutor, TabCompleter {
     }
 
     private boolean hasPermission(CommandSender commandSender) {
-        if (commandSender instanceof Player player) {
-            return bool(commandExecutor != null && checkPermission(player))
+        if (commandExecutor != null && commandSender instanceof Player player) {
+            return bool(checkPermission(player))
                     .onFalse(() -> NO_PERMISSION.send(player));
         } else {
             return gameCommand != null;
