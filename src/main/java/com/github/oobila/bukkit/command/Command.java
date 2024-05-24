@@ -203,7 +203,7 @@ public class Command implements CommandExecutor, TabCompleter {
             return bool(checkPermission(player))
                     .onFalse(() -> NO_PERMISSION.send(player));
         } else {
-            return gameCommand != null;
+            return true;
         }
     }
 
