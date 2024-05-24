@@ -220,11 +220,14 @@ public class Command implements CommandExecutor, TabCompleter {
     }
 
     private boolean validate(String[] args, Player player) {
-        if (args.length == 0 && arguments.isEmpty()) {
+        if (args.length == 0 && arguments.isEmpty() && commandExecutor != null) {
             //no arguments required
             return true;
         } else if (args.length > arguments.size()) {
             TOO_MANY_ARGS.send(player);
+            return false;
+        } else if (arguments.isEmpty()) {
+            sendHelpMessage(player);
             return false;
         } else {
             for(int i=0; i < arguments.size(); i++) {
