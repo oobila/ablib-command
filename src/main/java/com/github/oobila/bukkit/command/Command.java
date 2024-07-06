@@ -41,7 +41,7 @@ public class Command implements CommandExecutor, TabCompleter {
     private final String description;
     private final List<ArgumentBase<?,?>> arguments = new ArrayList<>();
     private Command parent = null;
-    private List<String> aliases;
+    private List<String> aliases = new ArrayList<>();
     private String permission;
     private PlayerCommandExecutor commandExecutor;
     private GameCommandExecutor gameCommand;
@@ -129,7 +129,9 @@ public class Command implements CommandExecutor, TabCompleter {
         if (pluginCommand == null) {
             throw new NullPointerException("command " + name + " does not exist");
         }
-        pluginCommand.setAliases(aliases);
+        if (aliases != null && !aliases.isEmpty()) {
+            pluginCommand.setAliases(aliases);
+        }
         pluginCommand.setExecutor(this);
         pluginCommand.setTabCompleter(this);
     }
