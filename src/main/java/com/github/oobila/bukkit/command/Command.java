@@ -193,7 +193,7 @@ public class Command implements CommandExecutor, TabCompleter {
                 }
             }
             if (args.length == 1 && !subCommands.isEmpty()) {
-                return subCommandsWithAliases.keySet().stream().toList();
+                return subCommands.keySet().stream().toList();
             }
         }
         return Collections.emptyList();
