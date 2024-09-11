@@ -73,6 +73,12 @@ public class Command implements CommandExecutor, TabCompleter {
         return this;
     }
 
+    public Command combinedCommand(PlayerCommandExecutor command) {
+        this.gameCommand = (command1, label, args) -> command.onCommand(null, command1, label, args);
+        this.commandExecutor = command;
+        return this;
+    }
+
     public <T, S extends ArgumentBase<T, ?>> ArgumentBase<T, S> arg(ArgumentBase<T, S> argument) {
         argument.validate(arguments);
         argument.position = arguments.size();
