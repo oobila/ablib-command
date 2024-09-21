@@ -8,6 +8,7 @@ import com.github.oobila.bukkit.command.validators.ValidationResponse;
 import com.github.oobila.bukkit.command.validators.Validator;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -22,6 +23,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import static com.github.oobila.bukkit.command.BoolStatement.bool;
@@ -359,5 +361,21 @@ public class Command implements CommandExecutor, TabCompleter {
                 .arg(ChatColor.GRAY, arguments.stream().map(argument -> "[" + argument.getName() + "]")
                         .collect(Collectors.joining(" ")))
                 .arg(ChatColor.GOLD, description);
+    }
+
+    protected void message(Message message, Player player) {
+        if (player != null) {
+            message.send(player);
+        } else {
+            Bukkit.getLogger().log(Level.INFO, message.toString());
+        }
+    }
+
+    protected void message(String string, Player player) {
+        if (player != null) {
+            message(new Message(string), player);
+        } else {
+            Bukkit.getLogger().log(Level.INFO, new Message(string).toString());
+        }
     }
 }
